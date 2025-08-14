@@ -17,7 +17,10 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
   }
-
+  if(error.name === 'ValidationError'){
+    console.log('valid err');
+    return response.status(400).json({error: error.message})
+  }
   next(error)
 }
 
@@ -76,7 +79,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
   .catch(err => next(err))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const body = request.body
 
     if(!body.name && !body.number){
@@ -98,7 +101,7 @@ app.post('/api/persons', (request, response) => {
 
     person.save().then(savedPerson => {
       response.json(savedPerson)
-    })
+    }).catch(err => next(err))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
