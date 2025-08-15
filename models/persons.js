@@ -4,7 +4,7 @@ mongoose.set('strictQuery',false)
 
 const url = process.env.MONGODB_URI
 
-mongoose.connect(url).then(res => console.log('connected to db')).catch(err => console.log('error connecting to MongoDB:', err.message))
+mongoose.connect(url).then(() => console.log('connected to db')).catch(err => console.log('error connecting to MongoDB:', err.message))
 
 const personSchema = new mongoose.Schema({
   name: {
@@ -21,7 +21,7 @@ const personSchema = new mongoose.Schema({
       message: props => `${props.value} is not a valid phone number!`
     }
   }
-});
+})
 
 personSchema.set('toJSON', {
   transform: (document, returnedObject) => {
